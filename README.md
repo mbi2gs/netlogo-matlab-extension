@@ -9,7 +9,7 @@
 ###================================================================
 
 ##Getting set up:
-You will need to have NetLogo and [Matlab](http://www.mathworks.com/products/matlab/) installed before use of this extension. 
+You will need to have [NetLogo](http://ccl.northwestern.edu/netlogo/) and [Matlab](http://www.mathworks.com/products/matlab/) installed before use of this extension. 
 Place the folder ("matlab") containing "matlab.jar" in your "Netlogo_v#/extensions/" directory.
 Place the file "matlabServer.m" in your Matlab path.
 
