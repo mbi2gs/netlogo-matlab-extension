@@ -1,11 +1,11 @@
 ###================================================================
 ###
 #  Matlab extension for NetLogo
-###   Written by Matt Biggs, Feb 2013
-###   Contact: mb3ad@virginia.edu
-###
-###	Based on code by Henrik Bengtsson for the [Matlab-R extension](http://rss.acs.unt.edu/Rdoc/library/R.matlab/html/R.matlab-package.html)
-###   and on code by Jan C. Thiele for the [Netlogo-R extension](http://netlogo-r-ext.berlios.de/)
+  **Written by Matt Biggs, Feb 2013**
+   **Contact: mb3ad [at] virginia [dot] edu**
+#
+Based on code by Henrik Bengtsson for the [Matlab-R extension](http://rss.acs.unt.edu/Rdoc/library/R.matlab/html/R.matlab-package.html)
+and on code by Jan C. Thiele for the [Netlogo-R extension](http://netlogo-r-ext.berlios.de/)
 ###================================================================
 
 ##Getting set up:
