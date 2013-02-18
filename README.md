@@ -8,7 +8,7 @@
 ###   and on code by Jan C. Thiele for the [Netlogo-R extension](http://netlogo-r-ext.berlios.de/)
 ###================================================================
 
-**Getting set up:**
+##Getting set up:
 You will need to have NetLogo and Matlab installed before use of this extension. 
 Place the folder ("matlab") containing "matlab.jar" in your "Netlogo_v#/extensions/" directory.
 Place the file "matlabServer.m" in your Matlab path.
