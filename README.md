@@ -9,7 +9,7 @@
 ###================================================================
 
 ##Getting set up:
-You will need to have NetLogo and Matlab installed before use of this extension. 
+You will need to have NetLogo and [Matlab](http://www.mathworks.com/products/matlab/) installed before use of this extension. 
 Place the folder ("matlab") containing "matlab.jar" in your "Netlogo_v#/extensions/" directory.
 Place the file "matlabServer.m" in your Matlab path.
 
@@ -151,6 +151,6 @@ statements, persist in the Matlab environment between commands, and can be re-ac
 #================================================================	
 ##Versions:
 
-**Version 1.0:** February 2013. Tested on NetLogo v. 5.0.3 and MATLAB R2012a on Windows 7 and Ubuntu 12.04.
+**Version 1.0:** February 2013. Tested with NetLogo 5.0.3 and MATLAB R2012a on Windows 7 and Ubuntu 12.04.
 
 #================================================================
