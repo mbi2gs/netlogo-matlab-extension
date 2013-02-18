@@ -27,7 +27,7 @@ statements, persist in the Matlab environment between commands, and can be re-ac
 
 The provided functions are:
 
-<eval>:
+#eval:
 Description: Eval allows the user to run any valid Matlab command from NetLogo, including 
 			 *.m files and custom functions/packages in the Matlab path. 
 Input: Valid Matlab command as a String.
@@ -39,7 +39,7 @@ Example Usage:
 	matlab:eval "initCobraToolbox()"
 	
 	
-<send-string>:
+#send-string:
 Description: Passes a variable of type "String" to Matlab.
 Input: String variable, and a name for that variable to be stored under in the Matlab environment.
 Output: None.
@@ -47,7 +47,7 @@ Example Usage:
 	matlab:send-string "varName" "This is my 1st string."
 	
 	
-<send-string-list>:
+#send-string-list:
 Description: Passes a list of "Strings" to Matlab.
 Input: List of "strings", and a name for that variable to be stored under in the Matlab environment.
 Output: None.
@@ -55,7 +55,7 @@ Example Usage:
 	matlab:send-string-list "varName" (list "a" "Billy" "This is my 1st string.")
 
 	
-<send-double>:
+#send-double:
 Description: Passes a variable of type "Double" to Matlab.
 Input: Variable of type double (just a NetLogo number), and a name for that variable to be stored 
 	   under in the Matlab environment.
@@ -64,7 +64,7 @@ Example Usage:
 	matlab:send-double "varName" 123.4
 	
 	
-<send-double-list>:
+#send-double-list:
 Description: Passes a list of variables of type "Double" to Matlab.
 Input: List of variables of type double (just NetLogo numbers in a list), and a name for that variable to be stored 
 	   under in the Matlab environment.
@@ -73,7 +73,7 @@ Example Usage:
 	matlab:send-double-list "varName" (list 13.4 3.14798 1 2)
 	
 	
-<get-string>:
+#get-string:
 Description: Returns a "string" stored in the Matlab environment (if it exists).
 Input: The name for that variable as it appears in Matlab.
 Output: String.
@@ -81,7 +81,7 @@ Example Usage:
 	set myString matlab:get-string "varName"
 	
 	
-<get-string-list>:
+#get-string-list:
 Description: Returns a list of "strings" stored in the Matlab environment (if it exists).
 Input: The name for that variable as it appears in Matlab.
 Output: List of strings.
@@ -89,7 +89,7 @@ Example Usage:
 	set myString matlab:get-string-list "varName"
 	
 	
-<get-double>:
+#get-double:
 Description: Returns a "double" stored in the Matlab environment (if it exists).
 Input: The name for that variable as it appears in Matlab.
 Output: Double.
@@ -97,7 +97,7 @@ Example Usage:
 	set myNumber matlab:get-double "varName"
 	
 	
-<get-double-list>:
+#get-double-list:
 Description: Returns a list of "doubles" stored in the Matlab environment (if it exists).
 Input: The name for that variable as it appears in Matlab.
 Output: List of doubles.
