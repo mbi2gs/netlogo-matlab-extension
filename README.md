@@ -6,6 +6,8 @@
 #
 Based on code by Henrik Bengtsson for the [Matlab-R extension](http://rss.acs.unt.edu/Rdoc/library/R.matlab/html/R.matlab-package.html)
 and on code by Jan C. Thiele for the [Netlogo-R extension](http://netlogo-r-ext.berlios.de/)
+
+This software is distributed under the [MIT Open Source](http://opensource.org/licenses/MIT) license.
 ###================================================================
 
 ##Getting set up:
