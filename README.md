@@ -27,7 +27,7 @@ statements, persist in the Matlab environment between commands, and can be re-ac
 
 The provided functions are:
 
-#eval:
+##eval:
 Description: Eval allows the user to run any valid Matlab command from NetLogo, including 
 			 *.m files and custom functions/packages in the Matlab path. 
 Input: Valid Matlab command as a String.
@@ -39,7 +39,7 @@ Example Usage:
 	matlab:eval "initCobraToolbox()"
 	
 	
-#send-string:
+##send-string:
 Description: Passes a variable of type "String" to Matlab.
 Input: String variable, and a name for that variable to be stored under in the Matlab environment.
 Output: None.
@@ -47,7 +47,7 @@ Example Usage:
 	matlab:send-string "varName" "This is my 1st string."
 	
 	
-#send-string-list:
+##send-string-list:
 Description: Passes a list of "Strings" to Matlab.
 Input: List of "strings", and a name for that variable to be stored under in the Matlab environment.
 Output: None.
@@ -55,7 +55,7 @@ Example Usage:
 	matlab:send-string-list "varName" (list "a" "Billy" "This is my 1st string.")
 
 	
-#send-double:
+##send-double:
 Description: Passes a variable of type "Double" to Matlab.
 Input: Variable of type double (just a NetLogo number), and a name for that variable to be stored 
 	   under in the Matlab environment.
