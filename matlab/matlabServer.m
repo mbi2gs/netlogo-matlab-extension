@@ -1,15 +1,9 @@
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MatlabServer
 %
 % This scripts starts a minimalistic Matlab "server".
 %
-% When started, the server listens for connections at port 9999 or the
-% port number specified by the environment variable 'MATLABSERVER_PORT'.
-%
-% Troubleshooting: If not working out of the box, add this to the 
-% Matlab path. Make sure InputStreamByteWrapper.class is in the same 
-% directory as this file!
+% When started, the server listens for connections at port 9999.
 %
 % Requirements:
 % This requires Matlab with Java support, i.e. Matlab v6 or higher.
