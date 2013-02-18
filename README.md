@@ -149,3 +149,8 @@ statements, persist in the Matlab environment between commands, and can be re-ac
 	
 	
 #================================================================	
+##Versions:
+
+**Version 1.0:** February 2013. Tested on NetLogo v. 5.0.3 and MATLAB R2012a on Windows 7 and Ubuntu 12.04.
+
+#================================================================
