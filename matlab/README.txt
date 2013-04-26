@@ -81,7 +81,32 @@ Try this example sequence:
         matlab:eval "test_function(sendInt)"
         set myEigs matlab:get-double-list "retEigs"
         show myEigs
-	
+
+2nd Note: Matrix passing is not currently supported by this extension, although a workaround has been suggested: it would be possible to use the "get-double-list" or "send-double-list" command within a loop structure to grab/send each column or row in your target matrix. 	
+
+3rd Note: Currently, if the function sent to Matlab (using the "eval" command) is slow, Netlogo will not wait for the results. If you need Netlogo to wait until Matlab is done, one possible workaround is to do something like the code below using a wait command within a loop. In this example, I set a limit on the number of iterations I'm willing to wait:
+
+    matlab:eval "a=1;"
+    matlab:eval "slowFunction();a=a+1;"
+    
+    ; Don't continue until the FBA is solved
+    set matlabReady? false
+    let mlcount 0
+    while [ matlabReady? = false ]
+    [
+      set matlabReturnVal (matlab:get-double "a")
+      if matlabReturnVal = 2
+      [
+        set matlabReady? true
+      ]
+      if mlcount > 50
+      [
+        set matlabReady? true
+      ]
+      set mlcount (mlcount + 1)
+      wait 0.1
+    ]
+
 
 #send-string:
 Description: Passes a variable of type "String" to Matlab.
