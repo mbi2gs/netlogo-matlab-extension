@@ -1,5 +1,5 @@
-#================================================================
-#
+###================================================================
+###
 #  Matlab extension for NetLogo
   Written by Matt Biggs, Feb 2013
    Contact: mb3ad [at] virginia [dot] edu
@@ -8,9 +8,9 @@ Based on code by Henrik Bengtsson for the [Matlab-R extension](http://rss.acs.un
 and on code by Jan C. Thiele for the [Netlogo-R extension](http://netlogo-r-ext.berlios.de/)
 
 This software is distributed under the [MIT Open Source](http://opensource.org/licenses/MIT) license.
-#================================================================
+###================================================================
 
-#Getting set up:
+##Getting set up:
 + You will need to have [NetLogo](http://ccl.northwestern.edu/netlogo/) and [Matlab](http://www.mathworks.com/products/matlab/) installed before use of this extension. 
 
 + Download the [NetLogo-Matlab-Extension](https://github.com/mbi2gs/netlogo-matlab-extension) as a ZIP file. Unzip it.
@@ -24,8 +24,7 @@ To include the matlab extension in a netlogo script, place this at the head of y
 	extensions[matlab]
 
 When you include the Matlab extension, NetLogo will pause while Matlab starts up. A Matlab
-window will be opened, and you will be able to see the output from the server. This window 
-can be minimized and ignored. However, you will need to close these windows when you're done.
+window will be opened (unless you're running Linux), and you will be able to see the output from the server. This window can be minimized and ignored. However, you will need to close these windows when you're done.
 
 Because NetLogo only has two basic datatypes (Strings/Lists of strings and Doubles/Lists of Doubles) that are 
 Matlab-compatible, the functions provided by this extension only deal with passing those 
@@ -34,7 +33,7 @@ statements, persist in the Matlab environment between commands, and can be re-ac
 
 The provided functions are:
 
-#eval:
+##eval:
 Description: Eval allows the user to run any valid Matlab command from NetLogo, including 
 			 .m files and custom functions/packages in the Matlab path. 
 			 
@@ -52,15 +51,7 @@ Example Usage:
 	
 	matlab:eval "someFunction()"
 
-Note: According to the [Matlab documentation](http://www.mathworks.com/help/matlab/ref/eval.html), 
-the eval function cannot create variables. These simple examples (e.g. "a = 1 + 1") _will_ create 
-the variables such as "a" that can then be retrieved from within Netlogo. The difficulty is in 
-getting values from your functions or scripts. The best workaround so far is to use the Matlab 
-[assignin](http://www.mathworks.com/help/matlab/ref/assignin.html) command to create variables 
-in the workspace, rather than pass them back. You may find that Netlogo cannot run a function 
-that was written after the extension was started (will print the error "empty command stream" in 
-the Matlab window). If this happens, close Netlogo, write and save your function, then re-open 
-Netlogo. 
+Note: According to the [Matlab documentation](http://www.mathworks.com/help/matlab/ref/eval.html), the eval function cannot create variables. These simple examples (e.g. "a = 1 + 1") _will_ create the variables such as "a" that can then be retrieved from within Netlogo. The difficulty is in getting values from your functions or scripts. The best workaround so far is to use the Matlab [assignin](http://www.mathworks.com/help/matlab/ref/assignin.html) command to create variables in the workspace, rather than pass them back. You may find that Netlogo cannot run a function that was written after the extension was started (will print the error "empty command stream" in the Matlab window). If this happens, close Netlogo, write and save your function, then re-open Netlogo. 
 
 Try this example sequence:
 
@@ -89,7 +80,7 @@ Try this example sequence:
     matlab:eval "a=1;"
     matlab:eval "slowFunction();a=a+1;"
     
-    ; Don't continue until the FBA is solved
+    ; Don't continue until slowFunction() is done
     set matlabReady? false
     let mlcount 0
     while [ matlabReady? = false ]
@@ -107,8 +98,7 @@ Try this example sequence:
       wait 0.1
     ]
 
-
-#send-string:
+##send-string:
 Description: Passes a variable of type "String" to Matlab.
 
 Input: String variable, and a name for that variable to be stored under in the Matlab environment.
@@ -120,7 +110,7 @@ Example Usage:
 	matlab:send-string "varName" "This is my 1st string."
 	
 	
-#send-string-list:
+##send-string-list:
 Description: Passes a list of "Strings" to Matlab.
 
 Input: List of "strings", and a name for that variable to be stored under in the Matlab environment.
@@ -132,11 +122,10 @@ Example Usage:
 	matlab:send-string-list "varName" (list "a" "Billy" "This is my 1st string.")
 
 	
-#send-double:
+##send-double:
 Description: Passes a variable of type "Double" to Matlab.
 
-Input: Variable of type double (just a NetLogo number), and a name for that variable to be stored 
-under in the Matlab environment.
+Input: Variable of type double (just a NetLogo number), and a name for that variable to be stored under in the Matlab environment.
 	   
 Output: None.
 
@@ -145,11 +134,10 @@ Example Usage:
 	matlab:send-double "varName" 123.4
 	
 	
-#send-double-list:
+##send-double-list:
 Description: Passes a list of variables of type "Double" to Matlab.
 
-Input: List of variables of type double (just NetLogo numbers in a list), and a name for that variable 
-to be stored under in the Matlab environment.
+Input: List of variables of type double (just NetLogo numbers in a list), and a name for that variable to be stored under in the Matlab environment.
 	   
 Output: None.
 
@@ -158,7 +146,7 @@ Example Usage:
 	matlab:send-double-list "varName" (list 13.4 3.14798 1 2)
 	
 	
-#get-string:
+##get-string:
 Description: Returns a "string" stored in the Matlab environment (if it exists).
 
 Input: The name for that variable as it appears in Matlab.
@@ -170,7 +158,7 @@ Example Usage:
 	set myString matlab:get-string "varName"
 	
 	
-#get-string-list:
+##get-string-list:
 Description: Returns a list of "strings" stored in the Matlab environment (if it exists).
 
 Input: The name for that variable as it appears in Matlab.
@@ -182,7 +170,7 @@ Example Usage:
 	set myString matlab:get-string-list "varName"
 	
 	
-#get-double:
+##get-double:
 Description: Returns a "double" stored in the Matlab environment (if it exists).
 
 Input: The name for that variable as it appears in Matlab.
@@ -194,7 +182,7 @@ Example Usage:
 	set myNumber matlab:get-double "varName"
 	
 	
-#get-double-list:
+##get-double-list:
 Description: Returns a list of "doubles" stored in the Matlab environment (if it exists).
 
 Input: The name for that variable as it appears in Matlab.
@@ -207,8 +195,8 @@ Example Usage:
 	
 	
 #================================================================	
-#Versions:
+##Versions:
 
-Version 1.0: February 2013. Tested with NetLogo 5.0.3 and MATLAB R2012a on Windows 7 and Ubuntu 12.04.
+Version 1.0: February 2013. Tested with NetLogo 5.0.3, 5.0.4 and MATLAB R2012a, R2013a on Windows 7 and Ubuntu 12.04.
 
 #================================================================
