@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+NetLogo-Extension-API-Version: 5.0
+Class-Manager: matlabExtension
+Extension-Name: matlab
+

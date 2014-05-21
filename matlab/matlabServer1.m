@@ -1,9 +1,11 @@
+function matlabServer1(myPort)
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MatlabServer
 %
 % This scripts starts a minimalistic Matlab "server".
 %
-% When started, the server listens for connections at port 9999.
+% When started, the server listens for connections at port myPort.
 %
 % Requirements:
 % This requires Matlab with Java support, i.e. Matlab v6 or higher.
@@ -84,22 +86,15 @@ fprintf(1, '----------------------\n');
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 % Initiate server socket to which clients may connect
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-port = getenv('MATLABSERVER_PORT');
-if (length(port) > 0)
-  port = str2num(port);
-else
-  % Try to open a server socket on port 9999
-  port = 9999;
-end
 
 % Ports 1-1023 are reserved for the Internet Assigned Numbers Authority.
 % Ports 49152-65535 are dynamic ports for the OS. [3]
-if (port < 1023 | port > 65535)
-  error('Cannot not open connection. Port (''MATLABSERVER_PORT'') is out of range [1023,65535]: %d', port);
+if (myPort < 1023 | myPort > 65535)
+  error('Cannot not open connection. Port is out of range [1023,65535]: %d', myPort);
 end
 
-fprintf(1, 'Trying to open server socket (port %d)...', port);
-server = java.net.ServerSocket(port);
+fprintf(1, 'Trying to open server socket (port %d)...', myPort);
+server = java.net.ServerSocket(myPort);
 fprintf(1, 'done.\n');
 
 
