@@ -2,6 +2,7 @@
 #
 #	Matlab extension for NetLogo
 #   Written by Matt Biggs, Feb 2013
+#   Updated by Ladislaus Dombrowski, May 2014
 #   Contact: mb3ad@virginia.edu
 #
 #	Based on code by Henrik Bengtsson for the Matlab-R extension
