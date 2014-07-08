@@ -14,6 +14,105 @@ function matlabServer1(myPort)
 % Based on code written by Henrik Bengtsson, 2002-2010 for the R extension
 % in Netlogo
 %
+% 
+% 
+% 
+% 
+%    Information for Kirschner-Linderman version
+%
+%
+% This file is included in the Netlogo-Matlab extension written by Matt Briggs 
+% at the University of Virginia.  It can be found here: https:
+% //github.com/mbi2gs/netlogo-matlab-extension/wiki.  The current package
+% contains code to run in headless mode in which port(socket) numbers are 
+% randomly generated.  This allows multiple copies of the program to be run 
+% simultaneously.  This can be run in headless mode if the thread=1 option is 
+% added to the netlogo command line to limit the number of threads created  
+% for the Matlab server to 1.  
+% 
+% The version we use, creates a file in the /tmp directory and keeps track of 
+% the current port(socket) number be assigned.  Each Netlogo run, locks this 
+% file, increments the port(socket) number in the file, uses the new port(socket) 
+% number to start the Matlab server, then releases the file.  This allows multiple
+% batch jobs to run with independent port(socket) numbers and avoids the 
+% possiblility of duplicate port(socket) numbers.  This has only been
+% tested on Linux machines.  In order to run on Windows/Mac
+% servers/clusters, the /tmp directory will have to be changed.
+% 
+% In order to run the Netlogo-Matlab interface there is a series of things you
+% need to do.  First download the software from https:
+% //github.com/mbi2gs/netlogo-matlab-extension/wiki.  This zip file contains 
+% matlab.jar,  a copy of this file, the java source and a README.txt.  The 
+% matlab.jar contains the compiled java code needed for communicating between
+% Netlogo and Matlab by opening a port(socket}.  The matlab.jar file needs to be in 
+% the extensions directory in Netlogo installation directory.  If you go to 
+% the root directory for the Netlogo installation, you will see an “extensions” 
+% subdirectory.  Go into the “extensions” subdirectory.  You will see a list 
+% of sub-directories for each of the Netlogo supplied extensions (such as: 
+% array, bitmap, …).  Create a matlab directory.  Put the matlab.jar into the
+% newly created Matlab directory.  This will allow Netlogo to find it when it 
+% executes it's “extension [matlab]” command in the code.  The java source is 
+% needed to recreate matlab.jar.  The README.txt contains information on the 
+% calls you can add to your Netlogo model in order to communicate between 
+% Matlab and Netlogo.
+% 
+% Now open your Netlogo model in Netlogo.  Select the “Code” tab and enter the
+% line “extensions [matlab]” at the top of the program.  This notifies Netlogo,
+% that the model will be referring to code in the  netlogo-x.x.x/extensions/matlab
+% directory.  You can now add calls to your model that will allow communication
+% back and forth between Netlogo and Matlab.  Save your model.
+% 
+% Now you need to add this Matlab file (matlabServer1.m) to a directory 
+% referenced in “File” “Set Path” path structure in Matlab.  
+% 
+% You are now set up to run the Netlogo-Matlab extension.  This is with the 
+% default code to create radomly generated port(socket) number.  It is possible
+% to run into duplicate port(socket) numbers if you are running with enough 
+% cpu's or clusters in batch mode.  For 20 simultaneous cpu's the odds are 
+% about .5%.  
+% 
+% For our runs, we have rewritten the code to create a temporary file,
+% “/tmp/portNo.txt”,  which keeps track of the current port(socket) number 
+% being used.  Each time a new Netlogo-Matlab process is started up, this file
+% is locked and the port number inside is incremented by 1.  This is the number
+% used for the port(socket) number for the new run and then the file is unlocked.
+% This prevents current jobs from running into common port(socket) numbers.  
+% In order to change Matt Brigg's code, you need to unpack the matlab.jar file, 
+% unload the java files from the zip file, swap in our file, compile it, and 
+% reconstruct the matlab.jar file.  You can extract the matlab.jar files with:
+%
+% jar xvf matlab.jar.   
+%
+% You can compile the java files with the command: 
+%
+% javac -classpath "/path/netlogo-x.x.x/NetLogo.jar" -d classes 
+%                         matlabConnectionHolder.java matlabExtension.java
+%
+% You can recreate the matalab.jar file witth the command: 
+%
+% jar cvfm matlab.jar manifest.txt -C classes.
+% 
+% Replace the matlab.jar file in netlogo-x.x.x/extensions/matlab with this file.
+% 
+% There are a couple of other problems to watch out for when running 
+% Netlogo-Matlab in batch mode.  When running Netlogo headless, Netlogo tries 
+% to launch multiple Matlab port(socket) sessions to take advantage of multiple
+% cpus (for their ability to do parameter runs inside Netlogo).  In order to 
+% inhibit this, we use the command line option “threads=1” to force only
+% 1 Matlab port(socket) session per Netlogo session.  The “threads=1”
+% option is coded in the net-qsub.sh script and should be taken care of 
+% automatically. Secondly, Netlogo views the directory where it's software
+% scripts reside as the home user directory.  When creating new files, this 
+% must be taken into account to make sure all the files end up where they 
+% should.
+%     
+% Matlab currently only allows 2^16 characters to be written to command window
+% while in headless mode.  Make sure your matlab .m files don't write anything
+% to the commmand line.  This usually occurs from print statements or by leaving
+% the terminating character (semi-colon) off of each program line.  The print 
+% lines in this program have been turned off.  You can re-enable them by changing
+% "debug" to true.     
+%     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('Running MatlabServer v1.0');
 
@@ -77,10 +176,12 @@ if (exist('os'))
   close(os);
   clear os;
 end
-
-fprintf(1, '----------------------\n');
-fprintf(1, 'Matlab server started!\n');
-fprintf(1, '----------------------\n');
+debug = false;
+if (debug) 
+  fprintf(1, '----------------------\n');
+  fprintf(1, 'Matlab server started!\n');
+  fprintf(1, '----------------------\n');
+end
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -93,9 +194,13 @@ if (myPort < 1023 | myPort > 65535)
   error('Cannot not open connection. Port is out of range [1023,65535]: %d', myPort);
 end
 
-fprintf(1, 'Trying to open server socket (port %d)...', myPort);
+if (debug) 
+  fprintf(1, 'Trying to open server socket (port %d)...', myPort);
+end
 server = java.net.ServerSocket(myPort);
-fprintf(1, 'done.\n');
+if (debug) 
+  fprintf(1, 'done.\n');
+end
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -108,7 +213,9 @@ fprintf(1, 'done.\n');
 % Wait for the client to connect
 clientSocket = server.accept();
 
-fprintf(1, 'Connected to client.\n');
+if (debug) 
+  fprintf(1, 'Connected to client.\n');
+end
 
 % ...client connected.
 in = clientSocket.getInputStream();
@@ -131,14 +238,20 @@ while (state >= 0),
   if (state == 0)
     try
         cmd = native2unicode(ois.readByte());
-        fprintf(1, 'Received cmd: %d\n', cmd);
+	if (debug) 
+          fprintf(1, 'Received cmd: %d\n', cmd);
+     	end
         
         if (cmd < 0 | cmd > 8)
-          fprintf(1, 'Unknown command code: %d\n', cmd);
+	  if (debug) 
+            fprintf(1, 'Unknown command code: %d\n', cmd);
+	  end
           cmd = 0;
         else
           state = cmd;
-          fprintf(1,'state = %d\n',state);
+	  if (debug) 
+            fprintf(1,'state = %d\n',state);
+	  end
         end
     catch exception
         cmd = 0;
@@ -163,12 +276,18 @@ while (state >= 0),
             end        
         end
         
-        fprintf('command = %s\n',command);
+	if (debug) 
+          fprintf('command = %s\n',command);
+	end
         eval(command);
-        fprintf('eval done\n');
+	if (debug) 
+          fprintf('eval done\n');
+	end
         
     catch EOFexception
-        fprintf('empty command stream.\n');
+	if (debug) 
+          fprintf('empty command stream.\n');
+	end
     end
     flush(oos);
     state = 0;
@@ -184,9 +303,13 @@ while (state >= 0),
     try
        object = ois.readObject();
     catch EOFexception
-        fprintf('empty object stream.\n');
+	if (debug) 
+          fprintf('empty object stream.\n');
+	end
     end
-    fprintf(1, 'object is of class: %s\n', class(object));
+    if (debug) 
+      fprintf(1, 'object is of class: %s\n', class(object));
+    end
     
     % Then receive the name 
     msg = native2unicode(ois.readByte());        
@@ -199,13 +322,19 @@ while (state >= 0),
             msg = native2unicode(13);
         end        
     end
-    fprintf(1, 'object name is: %s\n', objectName);
+    if (debug) 
+      fprintf(1, 'object name is: %s\n', objectName);
+    end
     %Finally, save the object under the name
     try
-        eval(strcat(objectName,' = object'));           
-        fprintf('object received and saved\n');
+        eval(strcat(objectName,' = object;'));           
+	if (debug) 
+          fprintf('object received and saved\n');
+	end
     catch exception
-        fprintf('Error recieving object\n');
+	if (debug) 
+          fprintf('Error recieving object\n');
+	end
     end
     object = '';
     flush(oos);
@@ -232,7 +361,9 @@ while (state >= 0),
             msg = native2unicode(13);
         end        
     end
-    fprintf(1, 'object is of class: %s\n', class(object));
+    if (debug) 
+      fprintf(1, 'object is of class: %s\n', class(object));
+    end
     
     % Then receive the name 
     msg = native2unicode(ois.readByte());        
@@ -245,14 +376,20 @@ while (state >= 0),
             msg = native2unicode(13);
         end        
     end
-    fprintf(1, 'object name is: %s\n', objectName);
+    if (debug) 
+      fprintf(1, 'object name is: %s\n', objectName);
+    end
     
     %Finally, save the object under the name
     try
         eval(strcat(objectName,' = object'));           
-        fprintf('string received and saved\n');
+	if (debug) 
+          fprintf('string received and saved\n');
+	end
     catch exception
-        fprintf('Error recieving string\n');
+	if (debug) 
+          fprintf('Error recieving string\n');
+	end
     end
     object = '';
     flush(oos);
@@ -280,7 +417,9 @@ while (state >= 0),
             msg = native2unicode(13);
         end        
     end
-    fprintf(1, 'object name is: %s\n', objectName);
+    if (debug) 
+      fprintf(1, 'object name is: %s\n', objectName);
+    end
     
     % Get each string and store in a cell
     strList = {};
@@ -301,9 +440,13 @@ while (state >= 0),
     %Finally, save the object under the name
     try
         eval(strcat(objectName,' = strList'));           
-        fprintf('string received and saved\n');
+	if (debug) 
+          fprintf('string received and saved\n');
+	end
     catch exception
-        fprintf('Error recieving string\n');
+	if (debug) 
+          fprintf('Error recieving string\n');
+	end
     end
     strList = {};
     flush(oos);
@@ -329,14 +472,20 @@ while (state >= 0),
     
     % If the object exists, send it to the client
     if exist(objectName, 'var') && length(size(eval(objectName))) <= 2 && min(size(eval(objectName))) == 1 && strcmpi(class(eval(objectName)), 'char')
-        fprintf(1, 'String with name %s exists.\n', objectName);
+	if (debug) 
+          fprintf(1, 'String with name %s exists.\n', objectName);
+	end
         oos.writeInt(length(eval(objectName)));
         oos.writeBytes(eval(objectName));
         oos.writeByte(13);
         oos.flush();
-        fprintf('Sent object of type string\n');
+	if (debug) 
+          fprintf('Sent object of type string\n');
+	end
     else
-       fprintf(1, 'String with name %s does not exist or is of wrong dimensions.\n', objectName);
+	if (debug) 
+          fprintf(1, 'String with name %s does not exist or is of wrong dimensions.\n', objectName);
+	end
        oos.writeInt(-1);
        oos.writeByte(13);
     end
@@ -363,7 +512,9 @@ while (state >= 0),
     
     % If the object exists, send it to the client
     if exist(objectName, 'var') && length(size(eval(objectName))) <= 2 && min(size(eval(objectName))) == 1 && strcmpi(class(eval(objectName)), 'cell')
-        fprintf(1, 'String list with name %s exists.\n', objectName);
+	if (debug) 
+          fprintf(1, 'String list with name %s exists.\n', objectName);
+	end
         
         %first send list length
         object = eval(objectName);
@@ -376,9 +527,13 @@ while (state >= 0),
             oos.writeByte(13);
             oos.flush();
         end
-        fprintf('Sent object of type string\n');
+	if (debug) 
+          fprintf('Sent object of type string\n');
+	end
     else
-       fprintf(1, 'String list with name %s does not exist or is of wrong dimensions.\n', objectName);
+	if (debug) 
+          fprintf(1, 'String list with name %s does not exist or is of wrong dimensions.\n', objectName);
+	end
        oos.writeInt(-1);
        oos.writeByte(13);
     end
@@ -392,7 +547,7 @@ while (state >= 0),
   %-------------------
   elseif (state == 7)
     % Get name of object that has been requested
-    msg = native2unicode(ois.readByte());        
+    msg = native2unicode(ois.readByte());  
     objectName = '';
     while not(uint8(msg) == 13)
         objectName = strcat(objectName,msg);
@@ -405,23 +560,31 @@ while (state >= 0),
     
     % If the object exists, send it to the client
     if exist(objectName, 'var') && length(size(eval(objectName))) <= 2 && min(size(eval(objectName))) == 1 && strcmpi(class(eval(objectName)), 'double')
-        fprintf(1, 'double or double[] with name %s exists.\n', objectName); 
+	if (debug)
+          fprintf(1, 'double or double[] with name %s exists.\n', objectName); 
+	end
                
         sizeOfObj = size(eval(objectName));
         if length(sizeOfObj) <= 2
             oos.writeInt(max(sizeOfObj));
-            object2send = eval(objectName)
+            object2send = eval(objectName);
             oos.writeObject(object2send);
             oos.writeByte(13);
             oos.flush();
-            fprintf('Sent object of type double.\n');
+	    if (debug)
+              fprintf('Sent object of type double.\n');
+	    end
         else
             oos.writeInt(-1);
             oos.writeByte(13);
-            fprintf('Object is too high dimensional.\n');
+	    if (debug)
+              fprintf('Object is too high dimensional.\n');
+	    end
         end        
     else
-       fprintf(1, 'object with name %s does not exist or is of wrong dimensions.\n', objectName);
+	if (debug)
+          fprintf(1, 'object with name %s does not exist or is of wrong dimensions.\n', objectName);
+	end
        oos.writeInt(-1);
        oos.writeByte(13);
     end
@@ -442,9 +605,11 @@ end
 % Shutting down the Matlab server
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-fprintf(1, '-----------------------\n');
-fprintf(1, 'Matlab server shutdown!\n');
-fprintf(1, '-----------------------\n');
+if (debug)
+  fprintf(1, '-----------------------\n');
+  fprintf(1, 'Matlab server shutdown!\n');
+  fprintf(1, '-----------------------\n');
+end
 oos.write(0);
 close(clientSocket);
 close(server);
