@@ -12,7 +12,7 @@
 
 Getting set up:
 Place the folder ("matlab") containing "matlab.jar" in your "Netlogo_v#/extensions/" directory.
-Place the file "matlabServer.m" in your Matlab path.
+Place the file "matlabServer1.m" in your Matlab path.
 
 To include the matlab extension in a netlogo script, place this at the head of your script:
 extensions[matlab]
