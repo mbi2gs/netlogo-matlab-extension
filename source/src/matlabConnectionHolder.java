@@ -82,14 +82,17 @@ public class matlabConnectionHolder
 		  {
 			 if (isWindows())
 			 {
-				 final String dosCommand = "cmd /c matlab -nosplash -r matlabServer1(" + PORT + ")";
+				 final String[] dosCommand = {"cmd", "/c", "matlab", "-desktop", "-r", "matlabServer1(" + PORT + ")"};
 				 matlabProc = Runtime.getRuntime().exec(dosCommand);
 			     return true;
 			 }
 			 else 
 			 {
-				 //final String dosCommand = "matlab -nosplash -r matlabServer1(" + PORT + ")";
-				 final String[] dosCommand = {"/Applications/MATLAB_R2017a.app/bin/matlab", "-desktop", "-r 'matlabServer1(" + PORT + ")'"};
+				 // MatLab needs to be on the path used for this to work. 
+				 // On macOS Sierra 10.12 and later this can be configured with 
+				 // the command line command below:
+				 // sudo launchctl config user path $PATH:/<path to matlab>/bin
+				 final String[] dosCommand = {"matlab", "-desktop", "-r 'matlabServer1(" + PORT + ")'"};
 				 matlabProc = Runtime.getRuntime().exec(dosCommand);
 			     return true;
 			 }
@@ -108,14 +111,17 @@ public class matlabConnectionHolder
 		  {
 			 if (isWindows())
 			 {
-				 final String dosCommand = "cmd /c matlab -automate -r matlabServer";
+				 final String[] dosCommand = {"cmd", "/c", "matlab", "-desktop", "-r", "matlabServer1"};
 				 matlabProc = Runtime.getRuntime().exec(dosCommand);
 			     return true;
 			 }
 			 else 
 			 {
-				 //final String dosCommand = "matlab -automate -r matlabServer";
-				 final String[] dosCommand = {"/Applications/MATLAB_R2017a.app/bin/matlab", "-desktop", "-r matlabServer1"};
+				 // MatLab needs to be on the path used for this to work. 
+				 // On macOS Sierra 10.12 and later this can be configured with 
+				 // the command line command below:
+				 // sudo launchctl config user path $PATH:/<path to matlab>/bin
+				 final String[] dosCommand = {"matlab", "-desktop", "-r matlabServer1"};
 				 matlabProc = Runtime.getRuntime().exec(dosCommand);
 			     return true;
 			 }
