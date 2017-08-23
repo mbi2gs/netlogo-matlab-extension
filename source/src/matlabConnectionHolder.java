@@ -88,7 +88,8 @@ public class matlabConnectionHolder
 			 }
 			 else 
 			 {
-				 final String dosCommand = "matlab -nosplash -r matlabServer1(" + PORT + ")";
+				 //final String dosCommand = "matlab -nosplash -r matlabServer1(" + PORT + ")";
+				 final String[] dosCommand = {"/Applications/MATLAB_R2017a.app/bin/matlab", "-desktop", "-r 'matlabServer1(" + PORT + ")'"};
 				 matlabProc = Runtime.getRuntime().exec(dosCommand);
 			     return true;
 			 }
@@ -113,7 +114,8 @@ public class matlabConnectionHolder
 			 }
 			 else 
 			 {
-				 final String dosCommand = "matlab -automate -r matlabServer";
+				 //final String dosCommand = "matlab -automate -r matlabServer";
+				 final String[] dosCommand = {"/Applications/MATLAB_R2017a.app/bin/matlab", "-desktop", "-r matlabServer1"};
 				 matlabProc = Runtime.getRuntime().exec(dosCommand);
 			     return true;
 			 }
