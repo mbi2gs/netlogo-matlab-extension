@@ -1,4 +1,7 @@
 import org.nlogo.api.*;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
+import org.nlogo.core.LogoList;
 
 public class matlabExtension extends DefaultClassManager 
 {
@@ -26,11 +29,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Send any MatLab command as a string to be evaluated
 	   */
-	  public static class matlabEval extends DefaultCommand
+	  public static class matlabEval implements Command
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.commandSyntax(new int[] {Syntax.StringType()});
+			    return SyntaxJ.commandSyntax(new int[] {Syntax.StringType()});
 		  }
 		  
 	  	  public void perform(Argument args[], Context context)
@@ -61,11 +64,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Send a string to be stored as a variable in MatLab
 	   */
-	  public static class matlabSendString extends DefaultCommand
+	  public static class matlabSendString implements Command
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.commandSyntax(new int[] {Syntax.StringType(), Syntax.StringType()});
+			    return SyntaxJ.commandSyntax(new int[] {Syntax.StringType(), Syntax.StringType()});
 		  }
 		  
 	  	  public void perform(Argument args[], Context context)
@@ -97,11 +100,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Send a string list to be stored as a variable in MatLab
 	   */
-	  public static class matlabSendStringList extends DefaultCommand
+	  public static class matlabSendStringList implements Command
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.commandSyntax(new int[] {Syntax.StringType(), Syntax.ListType()});
+			    return SyntaxJ.commandSyntax(new int[] {Syntax.StringType(), Syntax.ListType()});
 		  }
 		  
 	  	  public void perform(Argument args[], Context context)
@@ -139,11 +142,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Send a double to be stored as a variable in the Matlab environment
 	   */
-	  public static class matlabSendDouble extends DefaultCommand
+	  public static class matlabSendDouble implements Command
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.commandSyntax(new int[] {Syntax.StringType(), Syntax.NumberType()});
+			    return SyntaxJ.commandSyntax(new int[] {Syntax.StringType(), Syntax.NumberType()});
 		  }
 		  
 	  	  public void perform(Argument args[], Context context)
@@ -176,11 +179,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Send a list of numbers to be stored as an nx1 vector in Matlab
 	   */
-	  public static class matlabSendDoubleList extends DefaultCommand
+	  public static class matlabSendDoubleList implements Command
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.commandSyntax(new int[] {Syntax.StringType(), Syntax.ListType()});
+			    return SyntaxJ.commandSyntax(new int[] {Syntax.StringType(), Syntax.ListType()});
 		  }
 		  
 	  	  public void perform(Argument args[], Context context)
@@ -218,11 +221,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Returns a string stored in the Matlab environment (if it exists)
 	   */
-	  public static class matlabGetString extends DefaultReporter
+	  public static class matlabGetString implements Reporter
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.StringType());
+			    return SyntaxJ.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.StringType());
 		  }
 		  
 	  	  public Object report(Argument args[], Context context)
@@ -252,11 +255,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Returns a string list stored in the Matlab environment (if it exists)
 	   */
-	  public static class matlabGetStringList extends DefaultReporter
+	  public static class matlabGetStringList implements Reporter
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.ListType());
+			    return SyntaxJ.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.ListType());
 		  }
 		  
 	  	  public Object report(Argument args[], Context context)
@@ -293,11 +296,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Returns a double that has been stored in the Matlab environment (if it exists)	  
 	   */
-	  public static class matlabGetDouble extends DefaultReporter
+	  public static class matlabGetDouble implements Reporter
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.NumberType());
+			    return SyntaxJ.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.NumberType());
 		  }
 		  
 		  public Object report(Argument args[], Context context)
@@ -328,11 +331,11 @@ public class matlabExtension extends DefaultClassManager
 	  /*
 	   * Returns a double[] (as a LogoList) that is stored in the Matlab environment (if it exists)
 	   */
-	  public static class matlabGetDoubleList extends DefaultReporter
+	  public static class matlabGetDoubleList implements Reporter
 	  {	 
 		  public Syntax getSyntax() 
 		  {
-			    return Syntax.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.ListType());
+			    return SyntaxJ.reporterSyntax(new int[] {Syntax.StringType()}, Syntax.ListType());
 		  }
 		  
 		  public Object report(Argument args[], Context context)
