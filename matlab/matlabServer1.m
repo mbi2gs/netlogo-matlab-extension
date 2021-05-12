@@ -145,7 +145,7 @@ else
   % Using dynamic ones, it is possible to add the file
   % InputStreamByteWrapper.class to CLASSPATH, given it is
   % in the same directory as this script.
-  javaaddpath({fileparts(which('MatlabServer'))});
+  javaaddpath({fileparts(which('MatlabServer1'))});
   disp('Added InputStreamByteWrapper to dynamic Java CLASSPATH.');
 end
 
@@ -160,9 +160,9 @@ import java.net.*;
 % If an old Matlab server is running, close it
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 % If a server object exists from a previous run, close it.
-if (exist('server'))
-  close(server); 
-  clear server;
+if (exist('Matlabserver1_server'))
+  close(Matlabserver1_server); 
+  clear Matlabserver1_server;
 end
 
 % If an input stream exists from a previous run, close it.
@@ -172,7 +172,7 @@ if (exist('is'))
 end
 
 % If an output stream exists from a previous run, close it.
-if (exist('os'))
+if (exist('os')) 
   close(os);
   clear os;
 end
@@ -197,7 +197,7 @@ end
 if (debug) 
   fprintf(1, 'Trying to open server socket (port %d)...', myPort);
 end
-server = java.net.ServerSocket(myPort);
+Matlabserver1_server = java.net.ServerSocket(myPort);
 if (debug) 
   fprintf(1, 'done.\n');
 end
@@ -211,7 +211,7 @@ end
 % Open input and output streams
 
 % Wait for the client to connect
-clientSocket = server.accept();
+clientSocket = Matlabserver1_server.accept();
 
 if (debug) 
   fprintf(1, 'Connected to client.\n');
@@ -612,7 +612,7 @@ if (debug)
 end
 oos.write(0);
 close(clientSocket);
-close(server);
+close(Matlabserver1_server);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
